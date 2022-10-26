@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="agh.ics.oop.AnimalIntegratedTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-10-20T14:56:35" hostname="DESKTOP-GCOTL2J" time="0.056">
+  <properties/>
+  <testcase name="basicTest()" classname="agh.ics.oop.AnimalIntegratedTest" time="0.034"/>
+  <testcase name="advancedTest()" classname="agh.ics.oop.AnimalIntegratedTest" time="0.016"/>
+  <testcase name="setupTest()" classname="agh.ics.oop.AnimalIntegratedTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

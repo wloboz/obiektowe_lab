@@ -6,10 +6,10 @@ public enum MapDirection {
     @Override
     public String toString() {
         switch(this) {
-            case EAST: return "wschod";
-            case WEST: return "zachod";
-            case NORTH: return "polnoc";
-            case SOUTH: return "poludnie";
+            case EAST: return "east";
+            case WEST: return "west";
+            case NORTH: return "north";
+            case SOUTH: return "south";
         }
         return null;  // krzyczało na mnie żeby jakiegoś returna tutaj jednak dać, nie widzę potrzeby
         // bo w końcu to enum czyli określone wartości a załatwiam wszystkie w switchcase, ale niech mu będzie
