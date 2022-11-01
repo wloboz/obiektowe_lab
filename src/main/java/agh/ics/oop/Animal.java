@@ -11,9 +11,34 @@ public class Animal {
     private MapDirection dir = MapDirection.NORTH;
     private Vector2d pos = new Vector2d(2, 2);
 
+    private IWorldMap map;
+
+    Animal(IWorldMap map) {
+        this.map = map;
+    }
+
+    Animal(IWorldMap map, Vector2d initialPosition) {
+        this.map = map;
+        this.pos = initialPosition;
+    }
+
+    //getter do pos i dir
+    public Vector2d getPosition() {
+        return this.pos;
+    }
+
+    public MapDirection getDirection() {
+        return this.dir;
+    }
+
     @Override
     public String toString() {
-        return "position: " + this.pos.toString() + ", direction: " + this.dir.toString();
+        return switch (this.dir) {
+            case NORTH -> "N";
+            case SOUTH -> "S";
+            case EAST -> "E";
+            case WEST -> "W";
+        };
     }
 
     boolean isAt(Vector2d position) {
@@ -30,13 +55,13 @@ public class Animal {
             case LEFT -> this.dir = this.dir.previous();
             case BACKWARD -> {
                 newField = this.pos.subtract(this.dir.toUnitVector());
-                if (newField.precedes(new Vector2d(4, 4)) && newField.follows(new Vector2d(0, 0))) {
+                if (this.map.canMoveTo(newField) && !this.map.isOccupied(newField)) {
                     this.pos = newField;
                 }
             }
             case FORWARD -> {
                 newField = this.pos.add(this.dir.toUnitVector());
-                if (newField.precedes(new Vector2d(4, 4)) && newField.follows(new Vector2d(0, 0))) {
+                if (this.map.canMoveTo(newField) && !this.map.isOccupied(newField)) {
                     this.pos = newField;
                 }
             }
@@ -45,5 +70,8 @@ public class Animal {
             }
         }
     }
+
+
+
 
 }
