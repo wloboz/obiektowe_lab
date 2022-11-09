@@ -55,13 +55,15 @@ public class Animal {
             case LEFT -> this.dir = this.dir.previous();
             case BACKWARD -> {
                 newField = this.pos.subtract(this.dir.toUnitVector());
-                if (this.map.canMoveTo(newField) && !this.map.isOccupied(newField)) {
+                if (this.map.canMoveTo(newField) &&
+                        (!this.map.isOccupied(newField) || !(this.map.objectAt(newField) instanceof Animal))) {
                     this.pos = newField;
                 }
             }
             case FORWARD -> {
                 newField = this.pos.add(this.dir.toUnitVector());
-                if (this.map.canMoveTo(newField) && !this.map.isOccupied(newField)) {
+                if (this.map.canMoveTo(newField) &&
+                        (!this.map.isOccupied(newField) || !(this.map.objectAt(newField) instanceof Animal))) {
                     this.pos = newField;
                 }
             }
