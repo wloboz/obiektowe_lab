@@ -1,12 +1,15 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class AbstractWorldMap implements IWorldMap {
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     Vector2d lowerLeft, upperRight;
     Vector2d printLowerLeft, printUpperRight;
-    ArrayList<Animal> animalList = new ArrayList<>();
+    //ArrayList<Animal> animalList = new ArrayList<>();
+    Map<Vector2d, Animal> animalList= new HashMap<>();
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -15,12 +18,7 @@ public abstract class AbstractWorldMap implements IWorldMap {
 
     @Override
     public boolean isOccupied(Vector2d position) {  // true jak pole jest zajęte
-        for (Animal i: this.animalList) {
-            if (i.isAt(position)) {
-                return true;
-            }
-        }
-        return false;
+        return animalList.get(position) != null;
     }
 
     @Override
@@ -32,8 +30,20 @@ public abstract class AbstractWorldMap implements IWorldMap {
             //sprawdza czy pole jest zajęte przez zwierzaka, ignoruje inne rzeczy
             return false;
         }
-        this.animalList.add(animal); //dodaje zwierzaka
+        this.animalList.put(animal.getPosition(), animal); //dodaje zwierzaka
+        animal.addObserver(this);
         return true;
+    }
+
+    @Override
+    public Object objectAt(Vector2d position) {
+        return animalList.get(position);
+    }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        animalList.put(newPosition, animalList.get(oldPosition));
+        animalList.remove(oldPosition);
     }
 
     @Override

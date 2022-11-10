@@ -6,12 +6,16 @@
 
 package agh.ics.oop;
 
+import java.util.ArrayList;
+
 public class Animal {
 
     private MapDirection dir = MapDirection.NORTH;
     private Vector2d pos = new Vector2d(2, 2);
 
     private IWorldMap map;
+
+    private ArrayList<IPositionChangeObserver> observerList = new ArrayList<>();
 
     Animal(IWorldMap map) {
         this.map = map;
@@ -50,6 +54,7 @@ public class Animal {
             return;
         }
         Vector2d newField = new Vector2d(0,0);
+        Vector2d oldField = this.pos;
         switch (direction) {
             case RIGHT -> this.dir = this.dir.next();
             case LEFT -> this.dir = this.dir.previous();
@@ -58,6 +63,7 @@ public class Animal {
                 if (this.map.canMoveTo(newField) &&
                         (!this.map.isOccupied(newField) || !(this.map.objectAt(newField) instanceof Animal))) {
                     this.pos = newField;
+                    positionChanged(oldField, newField);
                 }
             }
             case FORWARD -> {
@@ -65,15 +71,28 @@ public class Animal {
                 if (this.map.canMoveTo(newField) &&
                         (!this.map.isOccupied(newField) || !(this.map.objectAt(newField) instanceof Animal))) {
                     this.pos = newField;
+                    positionChanged(oldField, newField);
                 }
             }
             default -> {
-                break;
+                return;
             }
         }
     }
 
+    void addObserver(IPositionChangeObserver observer) {
+        observerList.add(observer);
+    }
 
+    void removeObserver(IPositionChangeObserver observer) {
+        observerList.remove(observer);
+    }
+
+    void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        for (IPositionChangeObserver i: observerList) {
+            i.positionChanged(oldPosition, newPosition);
+        }
+    }
 
 
 }

@@ -27,9 +27,6 @@ public class SimulationEngine implements IEngine {
         for (MoveDirection i: direction) {
             animalList.get(current).move(i);
             current += 1;
-            /*if (current >= animalList.size()) {
-                current = 0;
-            }*/
             current = current % animalList.size();
         }
     }

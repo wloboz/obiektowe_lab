@@ -2,11 +2,13 @@ package agh.ics.oop;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.HashMap;
 
 public class GrassField extends AbstractWorldMap {
 
     int grassFields;
-    ArrayList<Grass> grassList = new ArrayList<>();
+    //ArrayList<Grass> grassList = new ArrayList<>();
+    HashMap<Vector2d, Grass> grassList = new HashMap<>();
     Vector2d lowerGrassBound, upperGrassBound;
 
     private void bounds(int n) {
@@ -36,52 +38,46 @@ public class GrassField extends AbstractWorldMap {
             y = rand.nextInt(max);
             newLocation = new Vector2d(x, y);
         } while (isOccupied(newLocation));
-        grassList.add(new Grass(newLocation));
+        grassList.put(newLocation, new Grass(newLocation));
     }
 
 
     @Override
     public boolean isOccupied(Vector2d position) {
         if (super.isOccupied(position)) {return true;}
-        for (Grass i: this.grassList) {
-            if (position.equals(i.position)) {
-                return true;
-            }
-        }
-        return false;
+        return (grassList.get(position) != null);
     }
 
     @Override
     public Object objectAt(Vector2d position) {  // ma zwracać trawę lub zwierzę, zwierzę ważniejsze
-        for (Animal i: this.animalList) {
-            if (i.isAt(position)) {
-                return i;
-            }
+        if (super.objectAt(position) != null) {
+            return super.objectAt(position);
         }
-        for (Grass i: this.grassList) {
-            if (position.equals(i.position)) {
-                return i;
-            }
-        }
-        return null;
+        return grassList.get(position);
     }
 
     @Override
     public void setPrintBounds() {
         if (!animalList.isEmpty()) {
-            printLowerLeft = printUpperRight = animalList.get(0).getPosition();
+            for (Animal i: animalList.values()) {  // potrzebne jest jakieś zwierzę do ustalenia początkowych bounds
+                printLowerLeft = printUpperRight = i.getPosition();
+                break;
+            }
         } else if (!grassList.isEmpty()) {
-            printLowerLeft = printUpperRight = grassList.get(0).getPosition();
+            for (Grass i: grassList.values()) {  // lub trawa
+                printLowerLeft = printUpperRight = i.getPosition();
+                break;
+            }
         } else {
             printLowerLeft = new Vector2d(0,0);
             printUpperRight = new Vector2d(0,0);
             return;
         }
-        for (Animal i: animalList) {
+        for (Animal i: animalList.values()) {
             printLowerLeft = printLowerLeft.lowerLeft(i.getPosition());
             printUpperRight = printUpperRight.upperRight(i.getPosition());
         }
-        for (Grass i: grassList) {
+        for (Grass i: grassList.values()) {
             printLowerLeft = printLowerLeft.lowerLeft(i.getPosition());
             printUpperRight = printUpperRight.upperRight(i.getPosition());
         }

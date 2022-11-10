@@ -11,18 +11,9 @@ public class RectangularMap extends AbstractWorldMap{
         this.height = height - 1;
         this.upperRight = this.printUpperRight = new Vector2d(this.width, this.height);
         this.lowerLeft = this.printLowerLeft = new Vector2d(0,0);
-        this.animalList = new ArrayList<Animal>();
     }
 
-    @Override
-    public Object objectAt(Vector2d position) {
-        for (Animal i: this.animalList) {
-            if (i.isAt(position)) {
-                return i;
-            }
-        }
-        return null;
-    }
+
 
     @Override
     public void setPrintBounds() {
