@@ -10,7 +10,7 @@ public class EngineIntegratedTest {
     @Test
     void setupTest() {
         IWorldMap map = new RectangularMap(3, 2);
-        Vector2d[] positions = { new Vector2d(0,0), new Vector2d(1,2), new Vector2d(1, 0), new Vector2d(0,0)};
+        Vector2d[] positions = { new Vector2d(0,0), new Vector2d(1,1)};
         ArrayList<Animal> animalList = new ArrayList<Animal>();
         for (Vector2d i: positions) {
             Animal newAnimal = new Animal(map, i);
@@ -26,7 +26,7 @@ public class EngineIntegratedTest {
         String[] testInstruction = new String[]{"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
         MoveDirection[] directions = new OptionsParser().parse(testInstruction);
         IWorldMap map = new RectangularMap(10, 5);
-        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4), new Vector2d(10,10) };
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4)};
         IEngine engine = new SimulationEngine(directions, map, positions);
         engine.run();
         Vector2d expected1 = new Vector2d(3,4);

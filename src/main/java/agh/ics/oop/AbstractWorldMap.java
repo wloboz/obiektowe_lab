@@ -24,11 +24,11 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     @Override
     public boolean place(Animal animal) {
         if (!canMoveTo(animal.getPosition())) { // sprawdza czy nowa pozycja jest w ogóle in bounds
-            return false;
+            throw new IllegalArgumentException("position " + animal.getPosition().toString() + " is out of bounds");
         }
         if (isOccupied(animal.getPosition()) && (objectAt(animal.getPosition()) instanceof Animal)) {
             //sprawdza czy pole jest zajęte przez zwierzaka, ignoruje inne rzeczy
-            return false;
+            throw new IllegalArgumentException("position " + animal.getPosition().toString() + " already has an animal");
         }
         this.animalList.put(animal.getPosition(), animal); //dodaje zwierzaka
         animal.addObserver(this);

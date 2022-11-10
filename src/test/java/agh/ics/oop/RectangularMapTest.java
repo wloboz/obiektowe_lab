@@ -16,7 +16,13 @@ public class RectangularMapTest {
         IWorldMap map = new RectangularMap(4, 4);
         Vector2d position = new Vector2d(2,3);
         Animal a = new Animal(map, position);
+        Animal b = new Animal(map, new Vector2d(4, 6));
+        Animal c = new Animal(map, position);
         Assertions.assertTrue(map.place(a));
+        Exception exception1 = Assertions.assertThrows(IllegalArgumentException.class, () -> { map.place(b);} );
+        Assertions.assertEquals("position (4,6) is out of bounds", exception1.getMessage());
+        Exception exception2 = Assertions.assertThrows(IllegalArgumentException.class, () -> { map.place(c);} );
+        Assertions.assertEquals("position (2,3) already has an animal", exception2.getMessage());
     }
 
     @Test

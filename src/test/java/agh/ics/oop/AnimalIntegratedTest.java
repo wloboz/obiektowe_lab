@@ -17,7 +17,7 @@ public class AnimalIntegratedTest {
 
     @Test
     void basicTest() {
-        String[] args = {"f", "forward", "r", "l", "b", "k", "backward", "left", "wrongstring", "right", "right"}; //powinno wrócić do początku
+        String[] args = {"f", "forward", "r", "l", "b", "backward", "left", "right", "right"}; //powinno wrócić do początku
         IWorldMap map = new RectangularMap(5, 5);
         Vector2d test_position = new Vector2d(2,2);
         Animal a = new Animal(map, test_position);
@@ -28,6 +28,16 @@ public class AnimalIntegratedTest {
         }
         Assertions.assertTrue(a.isAt(test_position));
         Assertions.assertEquals("E", a.toString());
+    }
+
+    @Test
+    void wrongInputTest() {
+        String[] args = {"f", "k"};
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {OptionsParser.parse(args);});
+        Assertions.assertEquals("'k' is not legal move specification", exception.getMessage());
+        String[] args2 = {"right", "wrongstring", "f", "left", "anotherone"};
+        Exception exception2 = Assertions.assertThrows(IllegalArgumentException.class, () -> {OptionsParser.parse(args2);});
+        Assertions.assertEquals("'wrongstring' is not legal move specification", exception2.getMessage());
     }
 
     @Test

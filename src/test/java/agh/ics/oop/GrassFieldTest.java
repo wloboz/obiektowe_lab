@@ -16,7 +16,12 @@ public class GrassFieldTest {
         IWorldMap map = new GrassField(4);
         Vector2d position = new Vector2d(2,3);
         Animal a = new Animal(map, position);
+        Animal b = new Animal(map, new Vector2d(-20, -30));
+        Animal c = new Animal(map, position);
         Assertions.assertTrue(map.place(a));
+        Assertions.assertTrue(map.place(b));
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> { map.place(c);} );
+        Assertions.assertEquals("position (2,3) already has an animal", exception.getMessage());
     }
 
     @Test

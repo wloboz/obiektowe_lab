@@ -11,7 +11,7 @@ public class OptionsParser {
                 case "b", "backward" -> result[j] = MoveDirection.BACKWARD;
                 case "r", "right" -> result[j] = MoveDirection.RIGHT;
                 case "l", "left" -> result[j] = MoveDirection.LEFT;
-                default -> {continue;}
+                default -> {throw new IllegalArgumentException("'" + args[i] + "'" + " is not legal move specification");}
             }
             j += 1;
         }
