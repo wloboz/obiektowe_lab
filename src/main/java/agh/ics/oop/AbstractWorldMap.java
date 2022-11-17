@@ -11,6 +11,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     //ArrayList<Animal> animalList = new ArrayList<>();
     Map<Vector2d, Animal> animalList= new HashMap<>();
 
+    MapBoundary bounds = new MapBoundary();
+
     @Override
     public boolean canMoveTo(Vector2d position) {
         return position.precedes(this.upperRight) && position.follows(this.lowerLeft);
@@ -31,6 +33,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             throw new IllegalArgumentException("position " + animal.getPosition().toString() + " already has an animal");
         }
         this.animalList.put(animal.getPosition(), animal); //dodaje zwierzaka
+        this.bounds.addElement(animal.getPosition());
         animal.addObserver(this);
         return true;
     }
@@ -44,6 +47,12 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
         animalList.put(newPosition, animalList.get(oldPosition));
         animalList.remove(oldPosition);
+        if (this instanceof GrassField && this.objectAt(oldPosition) instanceof Grass) {
+            bounds.addElement(newPosition);
+        } else {
+            bounds.positionChanged(oldPosition, newPosition);
+        }
+
     }
 
     @Override

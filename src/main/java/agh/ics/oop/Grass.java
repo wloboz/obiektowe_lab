@@ -8,6 +8,7 @@ public class Grass implements IMapElement {
         this.position = position;
     }
 
+    @Override
     public Vector2d getPosition() {
         return this.position;
     }

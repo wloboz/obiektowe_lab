@@ -27,6 +27,7 @@ public class Animal implements IMapElement {
     }
 
     //getter do pos i dir
+    @Override
     public Vector2d getPosition() {
         return this.pos;
     }

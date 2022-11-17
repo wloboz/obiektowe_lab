@@ -39,6 +39,7 @@ public class GrassField extends AbstractWorldMap {
             newLocation = new Vector2d(x, y);
         } while (isOccupied(newLocation));
         grassList.put(newLocation, new Grass(newLocation));
+        bounds.addElement(newLocation);
     }
 
 
@@ -58,29 +59,8 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     public void setPrintBounds() {
-        if (!animalList.isEmpty()) {
-            for (Animal i: animalList.values()) {  // potrzebne jest jakieś zwierzę do ustalenia początkowych bounds
-                printLowerLeft = printUpperRight = i.getPosition();
-                break;
-            }
-        } else if (!grassList.isEmpty()) {
-            for (Grass i: grassList.values()) {  // lub trawa
-                printLowerLeft = printUpperRight = i.getPosition();
-                break;
-            }
-        } else {
-            printLowerLeft = new Vector2d(0,0);
-            printUpperRight = new Vector2d(0,0);
-            return;
-        }
-        for (Animal i: animalList.values()) {
-            printLowerLeft = printLowerLeft.lowerLeft(i.getPosition());
-            printUpperRight = printUpperRight.upperRight(i.getPosition());
-        }
-        for (Grass i: grassList.values()) {
-            printLowerLeft = printLowerLeft.lowerLeft(i.getPosition());
-            printUpperRight = printUpperRight.upperRight(i.getPosition());
-        }
+        printUpperRight = bounds.getUpperBoundaries();
+        printLowerLeft = bounds.getLowerBoundaries();
     }
 
 
