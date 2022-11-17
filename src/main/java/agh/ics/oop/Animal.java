@@ -8,7 +8,7 @@ package agh.ics.oop;
 
 import java.util.ArrayList;
 
-public class Animal {
+public class Animal implements IMapElement {
 
     private MapDirection dir = MapDirection.NORTH;
     private Vector2d pos = new Vector2d(2, 2);
