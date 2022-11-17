@@ -7,7 +7,7 @@ import java.util.Map;
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
 
     Vector2d lowerLeft, upperRight;
-    Vector2d printLowerLeft, printUpperRight;
+    public Vector2d printLowerLeft, printUpperRight;
     //ArrayList<Animal> animalList = new ArrayList<>();
     Map<Vector2d, Animal> animalList= new HashMap<>();
 
@@ -52,6 +52,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         } else {
             bounds.positionChanged(oldPosition, newPosition);
         }
+        setPrintBounds();
 
     }
 
