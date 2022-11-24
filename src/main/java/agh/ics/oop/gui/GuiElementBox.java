@@ -1,5 +1,6 @@
-package agh.ics.oop;
+package agh.ics.oop.gui;
 
+import agh.ics.oop.IMapElement;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -12,7 +13,7 @@ import java.io.FileNotFoundException;
 
 public class GuiElementBox {
 
-    public VBox vbox;
+    public VBox vbox = new VBox();
 
     public GuiElementBox(IMapElement element) throws FileNotFoundException {
         String fileAddress = "src/main/resources/" + element.getFileName();
@@ -21,8 +22,9 @@ public class GuiElementBox {
         imageView.setFitWidth(20);
         imageView.setFitHeight(20);
         Label label = new Label(element.getPosition().toString());
-        VBox vbox = new VBox(imageView, label);
-        vbox.setAlignment(Pos.CENTER);
+        label.setMaxHeight(5);
+        this.vbox = new VBox(imageView, label);
+        this.vbox.setAlignment(Pos.CENTER);
     }
 
 }
