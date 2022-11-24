@@ -32,6 +32,17 @@ public class Animal implements IMapElement {
         return this.pos;
     }
 
+    @Override
+    public String getFileName() {
+        switch (this.dir) {
+            case NORTH -> {return "up.png";}
+            case WEST -> {return "left.png";}
+            case SOUTH -> {return "down.png";}
+            case EAST -> {return "right.png";}
+            default -> {return "grass.png";}  // nigdy nie powinno się zdarzyć ale intellij na mnie krzyczy
+        }
+    }
+
     public MapDirection getDirection() {
         return this.dir;
     }

@@ -11,6 +11,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+
 
 public class App extends javafx.application.Application{
 
@@ -62,16 +64,18 @@ public class App extends javafx.application.Application{
         }
     }
 
-    void drawObjects(AbstractWorldMap map, GridPane grid) {
+    void drawObjects(AbstractWorldMap map, GridPane grid) throws FileNotFoundException {
         for (int i = map.printLowerLeft.x; i <= map.printUpperRight.x; i++) {
             for (int j = map.printUpperRight.y; j >= map.printLowerLeft.y; j--) {
                 Object toAdd = map.objectAt(new Vector2d(i, j));
                 if (toAdd == null) {
                     continue;
                 }
-                Label label = new Label(toAdd.toString());
-                grid.add(label, i + 1, map.printUpperRight.y - j + 1);
-                GridPane.setHalignment(label, HPos.CENTER);
+                IMapElement toAddElement = (IMapElement) toAdd;
+                //Label label = new Label(toAdd.toString());
+                GuiElementBox box = new GuiElementBox(toAddElement);
+                grid.add(box.vbox, i + 1, map.printUpperRight.y - j + 1);
+                GridPane.setHalignment(box.vbox, HPos.CENTER);
             }
         }
     }
