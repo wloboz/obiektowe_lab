@@ -30,7 +30,7 @@ public class App extends javafx.application.Application implements IGUIObserver 
     public void start(Stage primaryStage) throws Exception {
         String[] args = getParameters().getRaw().toArray(new String[0]);
         MoveDirection[] direction = new OptionsParser().parse(args);
-        Vector2d[] position = {new Vector2d(4, 0), new Vector2d(3,1)};
+        Vector2d[] position = {new Vector2d(1, -1)};
 
         Scene uiScene = new Scene(new VBox(startButton,new HBox(new Label("input:"),inputField)));
         Stage secondStage = new Stage();
@@ -49,10 +49,13 @@ public class App extends javafx.application.Application implements IGUIObserver 
 
 
         //engineThread.start();
+        SimulationEngineGUI engine = new SimulationEngineGUI(map, position);
+        engine.addObserver(this);
 
         startButton.setOnAction(e -> {
-            SimulationEngineGUI engine = new SimulationEngineGUI(direction, map, position);
-            engine.addObserver(this);
+            String[] newMoves = inputField.getCharacters().toString().split(" ");
+            MoveDirection[] newDirection = new OptionsParser().parse(newMoves);
+            engine.directionSetter(newDirection);
             Thread engineThread = new Thread(engine);
             engineThread.start();
         });
@@ -67,11 +70,12 @@ public class App extends javafx.application.Application implements IGUIObserver 
     }
 
     public void draw() throws FileNotFoundException {
+        System.out.println(map.printLowerLeft.toString() + " " + map.printUpperRight.toString());
         grid.setGridLinesVisible(true);
         grid.setPadding(new Insets(10, 10, 10, 10));
         drawHeader(map, grid);
         drawObjects(map, grid);
-        //System.out.println(map.printLowerLeft.toString() + " " + map.printUpperRight.toString());
+
     }
 
 
@@ -101,9 +105,11 @@ public class App extends javafx.application.Application implements IGUIObserver 
             GridPane.setHalignment(label, HPos.CENTER);
 
         }
+        int rowIndex = 0;
         for (int i = map.printUpperRight.y; i >= map.printLowerLeft.y; i--) {
             label = new Label(String.format("%d", map.printUpperRight.y - i));
-            grid.add(label, 0, i - map.printLowerLeft.y + 1);
+            rowIndex = i - map.printLowerLeft.y + 1;
+            grid.add(label, 0, rowIndex );
             grid.getRowConstraints().add(new RowConstraints(this.gridSize));
             GridPane.setHalignment(label, HPos.CENTER);
         }
@@ -120,7 +126,8 @@ public class App extends javafx.application.Application implements IGUIObserver 
                 IMapElement toAddElement = (IMapElement) toAdd;
                 //Label label = new Label(toAdd.toString());
                 GuiElementBox box = new GuiElementBox(toAddElement);
-                grid.add(box.vbox, i + 1, map.printUpperRight.y - j + 1);
+                //grid.add(box.vbox, i + 1, map.printUpperRight.y - j + 1);
+                grid.add(box.vbox, i + 1 + Math.abs(map.printLowerLeft.x), map.printUpperRight.y - j + 1 + Math.abs(map.printLowerLeft.y));
                 GridPane.setHalignment(box.vbox, HPos.CENTER);
             }
         }

@@ -9,17 +9,23 @@ public class SimulationEngineGUI implements IEngine, Runnable {
     private final IWorldMap map;
     private final Vector2d[] position;
 
+    private ArrayList<Animal> animalList;
+
+    private boolean firstRun = true;
+
     private final int moveDelay = 1000;
 
     public SimulationEngineGUI(MoveDirection[] direction, IWorldMap map, Vector2d[] position) {
         this.direction = direction;
         this.map = map;
         this.position = position;
+        this.animalList = new ArrayList<>();
     }
 
     public SimulationEngineGUI(IWorldMap map, Vector2d[] position) {
         this.map = map;
         this.position = position;
+        this.animalList = new ArrayList<>();
     }
 
     public void addObserver(IGUIObserver observer) {
@@ -42,14 +48,15 @@ public class SimulationEngineGUI implements IEngine, Runnable {
 
     @Override
     public void run() {
-        ArrayList<Animal> animalList = new ArrayList<Animal>();
-        for (Vector2d i: position) {
-            Animal newAnimal = new Animal(map, i);
-            if (map.place(newAnimal)) {
-                animalList.add(newAnimal);
+        if (firstRun) {
+            for (Vector2d i : position) {
+                Animal newAnimal = new Animal(map, i);
+                if (map.place(newAnimal)) {
+                    animalList.add(newAnimal);
+                }
             }
         }
-
+        firstRun = false;
         int current = 0;
         for (MoveDirection i: direction) {
             animalList.get(current).move(i);
