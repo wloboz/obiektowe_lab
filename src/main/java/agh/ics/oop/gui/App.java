@@ -30,7 +30,7 @@ public class App extends javafx.application.Application implements IGUIObserver 
     public void start(Stage primaryStage) throws Exception {
         String[] args = getParameters().getRaw().toArray(new String[0]);
         MoveDirection[] direction = new OptionsParser().parse(args);
-        Vector2d[] position = {new Vector2d(1, -1)};
+        Vector2d[] position = {new Vector2d(1, -1), new Vector2d(2, 4)};
 
         Scene uiScene = new Scene(new VBox(startButton,new HBox(new Label("input:"),inputField)));
         Stage secondStage = new Stage();
@@ -46,9 +46,6 @@ public class App extends javafx.application.Application implements IGUIObserver 
         primaryStage.setScene(scene);
         primaryStage.show();
 
-
-
-        //engineThread.start();
         SimulationEngineGUI engine = new SimulationEngineGUI(map, position);
         engine.addObserver(this);
 
@@ -59,14 +56,6 @@ public class App extends javafx.application.Application implements IGUIObserver 
             Thread engineThread = new Thread(engine);
             engineThread.start();
         });
-
-
-
-        //SimulationEngine engine = new SimulationEngine(direction, map, position);
-        //engine.run();
-        //System.out.println(map.toString());
-
-
     }
 
     public void draw() throws FileNotFoundException {
@@ -106,28 +95,26 @@ public class App extends javafx.application.Application implements IGUIObserver 
 
         }
         int rowIndex = 0;
-        for (int i = map.printUpperRight.y; i >= map.printLowerLeft.y; i--) {
-            label = new Label(String.format("%d", map.printUpperRight.y - i));
-            rowIndex = i - map.printLowerLeft.y + 1;
+        for (int i = map.printLowerLeft.y; i <= map.printUpperRight.y; i++)
+        {
+            label = new Label(String.format("%d", i));
+            rowIndex = map.printUpperRight.y - i + 1;
             grid.add(label, 0, rowIndex );
             grid.getRowConstraints().add(new RowConstraints(this.gridSize));
             GridPane.setHalignment(label, HPos.CENTER);
         }
-        //grid.add(startButton, 0, map.printUpperRight.x + 1, 3, 1);
     }
 
     void drawObjects(AbstractWorldMap map, GridPane grid) throws FileNotFoundException {
         for (int i = map.printLowerLeft.x; i <= map.printUpperRight.x; i++) {
-            for (int j = map.printUpperRight.y; j >= map.printLowerLeft.y; j--) {
+            for (int j = map.printLowerLeft.y; j <= map.printUpperRight.y; j++) {
                 Object toAdd = map.objectAt(new Vector2d(i, j));
                 if (toAdd == null) {
                     continue;
                 }
                 IMapElement toAddElement = (IMapElement) toAdd;
-                //Label label = new Label(toAdd.toString());
                 GuiElementBox box = new GuiElementBox(toAddElement);
-                //grid.add(box.vbox, i + 1, map.printUpperRight.y - j + 1);
-                grid.add(box.vbox, i + 1 + Math.abs(map.printLowerLeft.x), map.printUpperRight.y - j + 1 + Math.abs(map.printLowerLeft.y));
+                grid.add(box.vbox, i + 1 + Math.abs(map.printLowerLeft.x), map.printUpperRight.y - j + 1);
                 GridPane.setHalignment(box.vbox, HPos.CENTER);
             }
         }
