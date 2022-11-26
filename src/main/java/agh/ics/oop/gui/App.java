@@ -5,10 +5,10 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -22,6 +22,9 @@ public class App extends javafx.application.Application implements IGUIObserver 
     private AbstractWorldMap map = new GrassField(3);
     private GridPane grid = new GridPane();
 
+    Button startButton = new Button("Start");
+    TextField inputField = new TextField();
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -29,14 +32,33 @@ public class App extends javafx.application.Application implements IGUIObserver 
         MoveDirection[] direction = new OptionsParser().parse(args);
         Vector2d[] position = {new Vector2d(4, 0), new Vector2d(3,1)};
 
+        Scene uiScene = new Scene(new VBox(startButton,new HBox(new Label("input:"),inputField)));
+        Stage secondStage = new Stage();
+        secondStage.setTitle("controls");
+        secondStage.setHeight(100);
+        secondStage.setWidth(300);
+        secondStage.setX(100);
+        secondStage.setAlwaysOnTop(true);
+        secondStage.setScene(uiScene);
+        secondStage.show();
+
         Scene scene = new Scene(grid, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        SimulationEngineGUI engine = new SimulationEngineGUI(direction, map, position);
-        engine.addObserver(this);
-        Thread engineThread = new Thread(engine);
-        engineThread.start();
+
+
+        //engineThread.start();
+
+        startButton.setOnAction(e -> {
+            SimulationEngineGUI engine = new SimulationEngineGUI(direction, map, position);
+            engine.addObserver(this);
+            Thread engineThread = new Thread(engine);
+            engineThread.start();
+        });
+
+
+
         //SimulationEngine engine = new SimulationEngine(direction, map, position);
         //engine.run();
         //System.out.println(map.toString());
@@ -49,7 +71,7 @@ public class App extends javafx.application.Application implements IGUIObserver 
         grid.setPadding(new Insets(10, 10, 10, 10));
         drawHeader(map, grid);
         drawObjects(map, grid);
-        System.out.println(map.printLowerLeft.toString() + " " + map.printUpperRight.toString());
+        //System.out.println(map.printLowerLeft.toString() + " " + map.printUpperRight.toString());
     }
 
 
@@ -85,6 +107,7 @@ public class App extends javafx.application.Application implements IGUIObserver 
             grid.getRowConstraints().add(new RowConstraints(this.gridSize));
             GridPane.setHalignment(label, HPos.CENTER);
         }
+        //grid.add(startButton, 0, map.printUpperRight.x + 1, 3, 1);
     }
 
     void drawObjects(AbstractWorldMap map, GridPane grid) throws FileNotFoundException {

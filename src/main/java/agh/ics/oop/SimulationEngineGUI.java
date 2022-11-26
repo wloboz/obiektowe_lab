@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SimulationEngineGUI implements IEngine, Runnable {
 
     private ArrayList<IGUIObserver> observerList = new ArrayList<IGUIObserver>();
-    private final MoveDirection[] direction;
+    private MoveDirection[] direction;
     private final IWorldMap map;
     private final Vector2d[] position;
 
@@ -17,14 +17,27 @@ public class SimulationEngineGUI implements IEngine, Runnable {
         this.position = position;
     }
 
+    public SimulationEngineGUI(IWorldMap map, Vector2d[] position) {
+        this.map = map;
+        this.position = position;
+    }
+
     public void addObserver(IGUIObserver observer) {
         observerList.add(observer);
+    }
+
+    public void removeObserver(IGUIObserver observer) {
+        observerList.remove(observer);
     }
 
     void render() {
         for (IGUIObserver observer : observerList) {
             observer.render();
         }
+    }
+
+    public void directionSetter(MoveDirection[] newDirections) {
+        this.direction = newDirections;
     }
 
     @Override
